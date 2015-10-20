@@ -75,15 +75,3 @@ void knob_ctl_img::write_pix()
         auto v = view(img_);
         v(xloc_, yloc_) = black_px;
 }
-
-int main(int argc, char **argv)
-{
-        knob_ctl_img kc;
-
-        kc.write_to("test_begin.png");
-        kc.move_x(100);
-        kc.move_y(100);
-        kc.move_x(100);
-        kc.move_y(100);
-        kc.write_to("test_end.png");
-}
