@@ -11,10 +11,13 @@
 #define int_p_NULL ((int*)NULL)
 
 #include "knob_ctl.hpp"
+#include "../lib/libpi.h"
+
 #include <boost/gil/extension/io/png_dynamic_io.hpp>
 
 #include <algorithm>
 #include <cassert>
+#include <cstdlib>
 #include <iostream>
 
 using namespace boost::gil;
@@ -81,4 +84,54 @@ void knob_ctl_img::write_pix()
         rgb8_pixel_t black_px(0, 0, 0);
         auto v = view(img_);
         v(xloc_, get_height() - (yloc_ + 1)) = black_px;
+}
+
+knob_ctl_hw::knob_ctl_hw(stepper_motor& xmot, stepper_motor& ymot,
+                         stepper_motor& cmot, std::chrono::milliseconds delay,
+                         int csteps)
+        : xmot_(xmot), ymot_(ymot), cmot_(cmot), delay_(delay),
+          csteps_(csteps), xloc_(0), yloc_(0)
+{
+        pi_mem_setup();
+        clear();
+}
+
+knob_ctl_hw::~knob_ctl_hw()
+{}
+
+void knob_ctl_hw::move_x(int dx)
+{
+        unsigned xfinal = get_x() + dx;
+        assert(xfinal < get_width());
+        step_motor(xmot_, dx);
+        xloc_ = xfinal;
+}
+
+void knob_ctl_hw::move_y(int dy)
+{
+        unsigned yfinal = get_y() + dy;
+        assert(yfinal < get_height());
+        step_motor(ymot_, dy);
+        yloc_ = yfinal;
+}
+
+void knob_ctl_hw::step_motor(stepper_motor& mot, int steps)
+{
+        // why the fuck does 'abs' return a signed value...
+        for (unsigned i = 0; i < (unsigned)abs(steps); ++i) {
+                if (steps < 0)
+                        mot.step_back(delay_);
+                else
+                        mot.step_forward(delay_);
+        }
+}
+
+void knob_ctl_hw::clear()
+{
+        step_motor(xmot_, -xloc_*1.2);
+        step_motor(ymot_, -yloc_*1.2);
+        xloc_ = 0;
+        yloc_ = 0;
+        step_motor(cmot_, csteps_);
+        step_motor(cmot_, -csteps_);
 }

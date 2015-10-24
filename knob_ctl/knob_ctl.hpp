@@ -10,6 +10,8 @@
 #include <boost/gil/gil_all.hpp>
 #include <utility>
 
+#include "stepper_motor.hpp"
+
 class knob_ctl_base {
 public:
         knob_ctl_base() {};
@@ -115,13 +117,33 @@ private:
 class knob_ctl_hw : public knob_ctl_base
 {
 public:
-        knob_ctl_hw();
+        knob_ctl_hw(stepper_motor& xmot, stepper_motor& ymot,
+                    stepper_motor& cmot, std::chrono::milliseconds delay,
+                    int csteps);
         ~knob_ctl_hw() override;
         void move_x(int dx) override;
         void move_y(int dy) override;
         void clear() override;
+
+        unsigned get_x() const override
+        {
+                return xloc_;
+        }
+
+        unsigned get_y() const override
+        {
+                return yloc_;
+        }
 private:
+        void step_motor(stepper_motor& mot, int steps);
         
+        stepper_motor& xmot_;
+        stepper_motor& ymot_;
+        stepper_motor& cmot_;
+        std::chrono::milliseconds delay_;
+        int csteps_;
+        unsigned xloc_;
+        unsigned yloc_;
 };
 
 #endif // KNOB_CTL_HPP
