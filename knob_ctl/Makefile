@@ -1,7 +1,7 @@
 CXX=clang++
 CXXFLAGS=-std=c++14 -Wall -Wextra -pedantic
 LDFLAGS=-lpng
-OBJS=knob_ctl.o number_writer.o
+OBJS=knob_ctl.o number_writer.o clock.o
 
 all: test $(OBJS)
 
@@ -12,6 +12,9 @@ knob_ctl.o: knob_ctl.cpp knob_ctl.hpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 number_writer.o: number_writer.cpp number_writer.hpp knob_ctl.hpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+clock.o: clock.cpp clock.hpp number_writer.hpp knob_ctl.hpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 test: test.cpp $(OBJS)

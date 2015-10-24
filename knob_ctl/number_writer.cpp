@@ -101,4 +101,11 @@ void number_writer::write(unsigned num)
                         x(-(w_-t_)), y((h_+t_)/2), x(w_), y(-h_), x(-w_)});
                 break;
         }
+
+        write_sequence({x(w_+s_)});
+}
+
+void number_writer::clear()
+{
+        kc_.clear();
 }

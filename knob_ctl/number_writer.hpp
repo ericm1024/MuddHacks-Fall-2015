@@ -28,8 +28,9 @@ public:
         // in the same units understood by knob_ctl. thickness is how
         // wide to draw th digits (think bubble letters)
         number_writer(knob_ctl_base& kc, unsigned dwidth,
-                      unsigned dheight, unsigned thickness)
-                : kc_(kc), w_(dwidth), h_(dheight), t_(thickness)
+                      unsigned dheight, unsigned thickness, unsigned space)
+                : kc_(kc), w_(dwidth), h_(dheight), t_(thickness),
+                  s_(space)
         {
                 assert(thickness < dwidth/2);
         }
@@ -38,6 +39,9 @@ public:
         // the knob is moved during this function call, but is returned
         // to its original location upon return
         void write(unsigned num);
+
+        // clear the display
+        void clear();
 private:
         using write_seq_t = std::initializer_list<detail::distance>;
         
@@ -47,4 +51,5 @@ private:
         const int w_;
         const int h_;
         const int t_;
+        const int s_;
 };
