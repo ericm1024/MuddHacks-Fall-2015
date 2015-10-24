@@ -5,7 +5,22 @@
  */
 
 #include "knob_ctl.hpp"
-#include <cassert>
+#include <utility>
+#include <initializer_list>
+
+namespace detail {
+
+struct distance {
+        std::pair<int,int> get() const
+        {
+                return std::pair<int,int>(x_, y_);
+        }
+protected:
+        int x_ = 0;
+        int y_ = 0;
+};
+
+}; // namespace detail
 
 class number_writer {
 public:
@@ -24,8 +39,12 @@ public:
         // to its original location upon return
         void write(unsigned num);
 private:
+        using write_seq_t = std::initializer_list<detail::distance>;
+        
+        void write_sequence(write_seq_t seq);
+        
         knob_ctl_base& kc_;
-        const unsigned w_;
-        const unsigned h_;
-        const unsigned t_;
+        const int w_;
+        const int h_;
+        const int t_;
 };

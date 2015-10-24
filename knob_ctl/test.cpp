@@ -1,14 +1,15 @@
 
 #include "number_writer.hpp"
+#include <iostream>
 
 int main()
 {
-        knob_ctl_img kc;
-        number_writer nw(kc, 50, 50, 6);
+        knob_ctl_img kc(1350, 512, 20, 20);
+        number_writer nw(kc, 100, 200, 24);
 
-        kc.move_y(-kc.get_height() + 20);
-        kc.move_x(20);
-
-        nw.write(0);
+        for (unsigned i = 0; i < 10; ++i) {
+                nw.write(i);
+                kc.move_x(120);
+        }
         kc.write_to("test_one_zero.png");
 }
