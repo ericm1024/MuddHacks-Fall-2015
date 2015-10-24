@@ -1,4 +1,5 @@
 #include "clock.hpp"
+#include "../lib/libpi.h"
 
 /* pin assignments for the x motor */
 #define X_MOT_A1_PIN 5
@@ -7,10 +8,10 @@
 #define X_MOT_B2_PIN 26
 
 /* pin assignments for the y motor */
-#define Y_MOT_A1_PIN 12
-#define Y_MOT_A2_PIN 21
-#define Y_MOT_B1_PIN 16
-#define Y_MOT_B2_PIN 20
+#define Y_MOT_A1_PIN 21
+#define Y_MOT_A2_PIN 12
+#define Y_MOT_B1_PIN 20
+#define Y_MOT_B2_PIN 16
 
 /* pin assignments for the clear motor */
 #define C_MOT_A1_PIN 4
@@ -38,21 +39,26 @@
 
 int main()
 {
-        stepper_motor x_motor(X_MOT_A1_PIN, X_MOT_A2_PIN,
-                              X_MOT_B1_PIN, X_MOT_B2_PIN);
+        pi_mem_setup();
+//        stepper_motor x_motor(X_MOT_A1_PIN, X_MOT_A2_PIN,
+//                              X_MOT_B1_PIN, X_MOT_B2_PIN);
 
         stepper_motor y_motor(Y_MOT_A1_PIN, Y_MOT_A2_PIN,
                               Y_MOT_B1_PIN, Y_MOT_B2_PIN);
 
-        stepper_motor clear_motor(C_MOT_A1_PIN, C_MOT_A2_PIN,
-                                  C_MOT_B1_PIN, C_MOT_B2_PIN);
 
-        knob_ctl_hw kc(x_motor, y_motor, clear_motor,
-                       STEP_DELAY_MS, CLEAR_STEPS);
+        for (;;)
+                y_motor.step_forward(STEP_DELAY_MS);
+        
+//        stepper_motor clear_motor(C_MOT_A1_PIN, C_MOT_A2_PIN,
+//                                  C_MOT_B1_PIN, C_MOT_B2_PIN);
 
-        number_writer nw(kc, WIDTH_STEPS, HEIGHT_STEPS,
-                         THICKNESS_STEPS, SPACING_STEPS);
+//        knob_ctl_hw kc(x_motor, y_motor, clear_motor,
+//                       STEP_DELAY_MS, CLEAR_STEPS);
 
-        mudd_hacks::clock ck(nw);
-        ck.run();
+//        number_writer nw(kc, WIDTH_STEPS, HEIGHT_STEPS,
+//                         THICKNESS_STEPS, SPACING_STEPS);
+
+//        mudd_hacks::clock ck(nw);
+//        ck.run();
 }

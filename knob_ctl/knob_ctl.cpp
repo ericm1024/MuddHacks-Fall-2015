@@ -89,10 +89,10 @@ void knob_ctl_img::write_pix()
 knob_ctl_hw::knob_ctl_hw(stepper_motor& xmot, stepper_motor& ymot,
                          stepper_motor& cmot, std::chrono::milliseconds delay,
                          int csteps)
-        : xmot_(xmot), ymot_(ymot), cmot_(cmot), delay_(delay),
+        : knob_ctl_base(100000, 100000, 0, 0),
+          xmot_(xmot), ymot_(ymot), cmot_(cmot), delay_(delay),
           csteps_(csteps), xloc_(0), yloc_(0)
 {
-        pi_mem_setup();
         clear();
 }
 
@@ -132,6 +132,6 @@ void knob_ctl_hw::clear()
         step_motor(ymot_, -yloc_*1.2);
         xloc_ = 0;
         yloc_ = 0;
-        step_motor(cmot_, csteps_);
-        step_motor(cmot_, -csteps_);
+//        step_motor(cmot_, csteps_);
+//        step_motor(cmot_, -csteps_);
 }
